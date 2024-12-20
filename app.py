@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import plotly.graph_objects as go
 
 # Configure API Key
-os.environ["GOOGLE_API_KEY"] = "AIzaSyC6ivZ-3UtC4R3nZxmPsJGbAEpRuY40LBc"
+os.environ["GOOGLE_API_KEY"] = "AIzaSyC6ivZ-3UtC4R3nZxmPsJGbAEpRuY40LBc"  # Replace with your API key
 
 # Initialize LLM
 llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.2)
@@ -88,15 +88,7 @@ def generate_learning_path(subject, user_interests, learning_style, target_days)
     - Learning style: {learning_style}
     
     Generate a learning path with educational resources. Each resource must have a title, 
-    type (video/article/exercise/course), URL, and description. Generate realistic URLs 
-    from well-known educational platforms like:
-    - Coursera (coursera.org)
-    - edX (edx.org)
-    - Khan Academy (khanacademy.org)
-    - YouTube (youtube.com)
-    - FreeCodeCamp (freecodecamp.org)
-    - Medium (medium.com)
-    - GitHub (github.com)
+    type (video/article/exercise/course), and description.
     
     Format as JSON:
     {{
@@ -109,17 +101,13 @@ def generate_learning_path(subject, user_interests, learning_style, target_days)
                     {{
                         "title": "<specific course/resource title>",
                         "type": "<video/article/exercise/course>",
-                        "url": "<specific URL from educational platform>",
-                        "platform": "<platform name>",
-                        "description": "<detailed description>",
-                        "estimated_time": "<estimated completion time in hours>"
+                        "description": "<detailed description>"
                     }}
                 ],
                 "practice_exercises": [
                     {{
                         "description": "<specific exercise description>",
-                        "difficulty": "<beginner/intermediate/advanced>",
-                        "url": "<URL to practice exercise if available>"
+                        "difficulty": "<beginner/intermediate/advanced>"
                     }}
                 ]
             }}
@@ -172,9 +160,6 @@ def display_learning_path(username, path_id, path_data):
                 if resources:
                     for resource in resources:
                         with st.expander(f"{resource.get('title', 'Untitled')} ({resource.get('type', 'Resource')})"):
-                            st.markdown(f"**Platform:** {resource.get('platform', 'N/A')}")
-                            st.markdown(f"**URL:** [{resource.get('url', '#')}]({resource.get('url', '#')})")
-                            st.markdown(f"**Estimated Time:** {resource.get('estimated_time', 'N/A')}")
                             st.markdown(f"**Description:** {resource.get('description', 'No description available')}")
                 
                 st.subheader("💪 Practice Exercises")
@@ -183,8 +168,6 @@ def display_learning_path(username, path_id, path_data):
                     for exercise in exercises:
                         with st.expander(f"{exercise.get('difficulty', 'General').title()} Level Exercise"):
                             st.markdown(exercise.get('description', 'No description available'))
-                            if exercise.get('url'):
-                                st.markdown(f"**Exercise Link:** [{exercise['url']}]({exercise['url']})")
                 
                 if st.button(f"Take Assessment: {topic.get('name', 'Unnamed Topic')}", 
                            key=f"assess_{path_id}_{topic.get('name', 'unnamed')}"):
@@ -342,6 +325,7 @@ def display_analytics(username):
             best_day = active_days.index[0]
             st.write(f"💪 You perform best on {best_day}s at {best_hour:02d}:00")
 
+
 def main():
     st.set_page_config(page_title="AI Learning Assistant", layout="wide")
     
@@ -449,6 +433,8 @@ def main():
                         st.success("Learning path created successfully!")
                         st.rerun()
         
+        # Assessment Tab
+
         with tabs[2]:
             st.header("Progress Analytics")
             if st.session_state.current_user:
@@ -458,7 +444,6 @@ def main():
                 else:
                     st.info("Start learning to see your progress analytics!")
 
-        # Assessment Tab
         with tabs[3]:
             st.header("Assessments")
             
