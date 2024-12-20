@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import plotly.graph_objects as go
 
 # Configure API Key
-os.environ["GOOGLE_API_KEY"] = "AIzaSyC6ivZ-3UtC4R3nZxmPsJGbAEpRuY40LBc"  # Replace with your API key
+os.environ["GOOGLE_API_KEY"] = "GOOGLE_API_KEY"  # Replace with your API key
 
 # Initialize LLM
 llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.2)
